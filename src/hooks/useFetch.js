@@ -11,6 +11,13 @@ export const useFetch = (url) => {
 
   const getFetch = async () => {
     if (!url) return;
+
+    setState({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
+
     try {
       const res = await fetch(url);
       const data = await res.json();
@@ -18,26 +25,20 @@ export const useFetch = (url) => {
       setState({
         data,
         isLoading: false,
-        error: error,
+        error: null,
       });
     } catch (error) {
       setState({
         data: null,
-        error: error,
         isLoading: false,
+        error: error.message || "Ha ocurrido un error",
       });
     }
-
-    useState({
-      data,
-      isLoading: false,
-      error: null,
-    });
   };
 
   useEffect(() => {
     getFetch();
-  }, []);
+  }, [url]);
 
   return {
     data,
